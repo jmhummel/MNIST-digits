@@ -32,7 +32,7 @@ model = Sequential()
 
 model.add(Convolution2D(32, (3, 3), activation='relu', input_shape=(1, 28, 28), data_format='channels_first'))
 model.add(Convolution2D(32, 3, 3, activation='relu'))
-model.add(MaxPooling2D(pool_size=(2,2)))
+model.add(MaxPooling2D(pool_size=(2, 2)))
 model.add(Dropout(0.25))
 
 model.add(Flatten())
@@ -46,8 +46,9 @@ model.compile(loss='categorical_crossentropy',
               metrics=['accuracy'])
 
 # 9. Fit model on training data
-model.fit(X_train, Y_train,
-          batch_size=32, nb_epoch=10, verbose=1)
+model.fit(X_train, Y_train, batch_size=32, nb_epoch=10, verbose=1)
 
 # 10. Evaluate model on test data
 score = model.evaluate(X_test, Y_test, verbose=1)
+print(score)
+# [0.03183142497268659, 0.9903]
