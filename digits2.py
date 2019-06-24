@@ -51,7 +51,7 @@ model.compile(loss='categorical_crossentropy',
               metrics=['accuracy'])
 
 # 9. Fit model on training data
-model.fit(X_train, Y_train, batch_size=32, nb_epoch=40, verbose=1)
+model.fit(X_train, Y_train, batch_size=32, nb_epoch=1, verbose=1)
 
 # 10. Evaluate model on test data
 score = model.evaluate(X_test, Y_test, verbose=1)
@@ -80,15 +80,19 @@ for i in range(10):
     axs[i].set_title(str(i))
 plt.show()
 
-# w3 = w2.reshape((25, 10))
-# w4 = np.zeros((28, 28, 10))
-# fig, axs = plt.subplots(5, 2, figsize=(8, 8))
-# fig.subplots_adjust(hspace=.5, wspace=.001)
-# axs = axs.ravel()
-#
-# for i in range(10):
-#     for j in range(25):
-#         w4[:, :, i] += w1[:, :, j] * w3[j, i]
-#     axs[i].imshow(w4[:, :, i])
-#     axs[i].set_title(str(i))
-# plt.show()
+x = np.zeros((28, 28, 28, 28))
+for i in range(28):
+    for j in range(28):
+        x[i, j, i, j] = 1
+x = x.reshape((28 * 28, 1, 28, 28))
+y = model.predict(x)
+y = y.reshape((28, 28, 10))
+
+fig, axs = plt.subplots(5, 2, figsize=(8, 8))
+fig.subplots_adjust(hspace=.5, wspace=.001)
+axs = axs.ravel()
+
+for i in range(10):
+    axs[i].imshow(y[:, :, i])
+    axs[i].set_title(str(i))
+plt.show()
