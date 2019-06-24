@@ -5,6 +5,7 @@ from keras.layers import Convolution2D, MaxPooling2D
 from keras.utils import np_utils
 from keras.datasets import mnist
 from matplotlib import pyplot as plt
+from keras import backend as K
 
 np.random.seed(123)  # for reproducibility
 
@@ -80,19 +81,27 @@ for i in range(10):
     axs[i].set_title(str(i))
 plt.show()
 
-x = np.zeros((28, 28, 28, 28))
-for i in range(28):
-    for j in range(28):
-        x[i, j, i, j] = 1
-x = x.reshape((28 * 28, 1, 28, 28))
-y = model.predict(x)
-y = y.reshape((28, 28, 10))
 
 fig, axs = plt.subplots(5, 2, figsize=(8, 8))
 fig.subplots_adjust(hspace=.5, wspace=.001)
 axs = axs.ravel()
 
-for i in range(10):
-    axs[i].imshow(y[:, :, i])
+for i in range(10):  # the index of the output class we want to maximize
+    output = model.layers[-1].output
+    loss = K.mean(output[:, i])  # get the average activation of our desired class over the batch
+    # the output of `gradients` is a list, just take the first (and only) element
+    grads = K.gradients(loss, model.input)[0]
+    # normalize the gradients to help having an smooth optimization process
+    grads = K.l2_normalize(grads)
+    func = K.function([model.input], [loss, grads])
+    input_img = np.random.random((1, 1, 28, 28))  # define an initial random image
+
+    lr = 1.  # learning rate used for gradient updates
+    max_iter = 10000  # number of gradient updates iterations
+    for _ in range(max_iter):
+        loss_val, grads_val = func([input_img])
+        input_img += grads_val * lr  # update the image based on gradients
+
+    axs[i].imshow(input_img.reshape((28, 28)))
     axs[i].set_title(str(i))
 plt.show()
