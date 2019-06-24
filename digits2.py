@@ -80,15 +80,15 @@ for i in range(10):
     axs[i].set_title(str(i))
 plt.show()
 
-w3 = w2.reshape((25, 10))
-w4 = np.zeros((28, 28, 10))
-fig, axs = plt.subplots(5, 2, figsize=(8, 8))
-fig.subplots_adjust(hspace=.5, wspace=.001)
-axs = axs.ravel()
-
-for i in range(10):
-    for j in range(25):
-        w4[:, :, i] += w1[:, :, j] * w3[j, i]
-    axs[i].imshow(w4[:, :, i])
-    axs[i].set_title(str(i))
-plt.show()
+# w3 = w2.reshape((25, 10))
+# w4 = np.zeros((28, 28, 10))
+# fig, axs = plt.subplots(5, 2, figsize=(8, 8))
+# fig.subplots_adjust(hspace=.5, wspace=.001)
+# axs = axs.ravel()
+#
+# for i in range(10):
+#     for j in range(25):
+#         w4[:, :, i] += w1[:, :, j] * w3[j, i]
+#     axs[i].imshow(w4[:, :, i])
+#     axs[i].set_title(str(i))
+# plt.show()
